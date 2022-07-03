@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!--Preloader-->
+    <div class="preloader-it">
+        <div class="la-anim-1"></div>
+    </div>
+    <!--/Preloader-->
+
+    <div class="wrapper  pa-0">
+        <header class="sp-header">
+            <div class="sp-logo-wrap pull-left">
+                <a href="index.html">
+                    <img class="brand-img mr-10" src="../img/logo.png" alt="traveler"/>
+                    <span class="brand-text"><img src="{% static 'images/traveler.png' %}" alt="traveler"/></span>
+                </a>
+            </div>
+            <div class="form-group mb-0 pull-right">
+                {% if request.resolver_match.url_name == 'login' %}
+                    <span class="inline-block pr-10">Don't have an account?</span>
+                    <a class="inline-block btn btn-danger btn-rounded " href="{% url 'register' %}">Register</a>
+                {% else %}
+                    <span class="inline-block pr-10">Already have an account?</span>
+                    <a class="inline-block btn btn-danger btn-rounded " href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="page-wrapper pa-0 ma-0 auth-page">
+            <div class="container">
+                <!-- Row -->
+                <div class="table-struct full-width full-height">
+                    <div class="table-cell vertical-align-middle auth-form-wrap">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js/init.js' %}"></script>
+</body>
+</html>
