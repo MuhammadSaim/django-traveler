@@ -1,10 +1,48 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link rel="stylesheet" href="{% static 'css/jasny-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
+    <!--Preloader-->
+	<div class="preloader-it">
+		<div class="la-anim-1"></div>
+	</div>
+	<!--/Preloader-->
+
+    <div class="wrapper theme-2-active navbar-top-light horizontal-nav">
+
+        {% include "includes/navbar.html" %}
+        {% include "includes/navigation.html" %}
+
+        <!-- Main Content -->
+		<div class="page-wrapper">
+            <div class="container">
+
+                {% block content %}{% endblock %}
+
+            {#    footer      #}
+                {% include "includes/footer.html" %}
+            {#    footer      #}
+
+            </div>
+        </div>
+        <!-- /Main Content -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'js/init.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,114 @@
+{% extends "layouts/app.html" %}
+
+{% block title %} {{ user.get_username }}'s profile {% endblock %}
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">{{ user.get_username|upper }}'s Profile</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>Profile</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">Update Profile</div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        {% include 'includes/messages.html' %}
+                        <div class="form-wrap">
+                            {% if form.errors %}
+                                <div class="alert alert-danger">
+                                    <strong class="mb-2">Errors</strong>
+                                    <br>
+                                    <ul>
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <li>{{ field.label_tag }} {{ error|escape }}</li>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label mb-10" for="exampleInputName_1">First name</label>
+                                            {{ form.first_name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label mb-10" for="exampleInputName_1">Last name</label>
+                                            {{ form.last_name }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label mb-10" for="exampleInputName_1">Username</label>
+                                            {{ form.username }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="form-group">
+                                            <label class="control-label mb-10" for="exampleInputName_1">Email</label>
+                                            {{ form.email }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <label class="control-label mb-10 text-left">File upload</label>
+                                        <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput"><i
+                                                    class="glyphicon glyphicon-file fileinput-exists"></i> <span
+                                                    class="fileinput-filename"></span></div>
+                                            <span class="input-group-addon fileupload btn btn-default btn-anim btn-file"><i
+                                                    class="fa fa-upload"></i> <span class="fileinput-new btn-text">Select file</span> <span
+                                                    class="fileinput-exists btn-text">Change</span>
+														<input type="file" name="avatar" accept="image/jpeg,image/png,image/jpg">
+														</span> <a href="#"
+                                                                   class="input-group-addon btn btn-default btn-anim fileinput-exists"
+                                                                   data-dismiss="fileinput"><i
+                                                class="fa fa-trash"></i><span class="btn-text"> Remove</span></a>
+                                        </div>
+                                        {% if user.avatar %}
+                                            <img class="img-thumbnail" src="{{ user.avatar.url }}" alt="{{ user.get_username }}">
+                                        {% else %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <button class="btn btn-info" type="submit">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

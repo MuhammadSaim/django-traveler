@@ -1,0 +1,33 @@
+<!-- Left Sidebar Menu -->
+<div class="fixed-sidebar-left">
+    <ul class="nav navbar-nav side-nav nicescroll-bar">
+        <li class="navigation-header">
+            <span>Main</span>
+            <hr/>
+        </li>
+        <li>
+            <a href="documentation.html">
+                <div class="pull-left"><i class="ti-book mr-20"></i><span class="right-nav-text">Hotels</span>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+        </li>
+        <li>
+            <a href="documentation.html">
+                <div class="pull-left"><i class="ti-book mr-20"></i><span class="right-nav-text">Restaurants</span>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+        </li>
+        {% if user.role == 'admin' %}
+            <li>
+                <a href="{% url 'admin.hotels' %}">
+                    <div class="pull-left"><i class="ti-book mr-20"></i><span class="right-nav-text">Manage Hotels</span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+<!-- /Left Sidebar Menu -->
