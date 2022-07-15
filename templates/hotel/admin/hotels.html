@@ -62,10 +62,22 @@
                                                 {% endif %}
                                             </td>
                                             <td>
-                                                <a href="#" class="btn btn-success">
+                                                {% if hotel.is_active %}
+                                                    <a href="{% url 'admin.hotel.status' hotel.slug %}" class="btn btn-info">
+                                                        <i class="fa fa-eye-slash"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'admin.hotel.status' hotel.slug %}" class="btn btn-info">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                {% endif %}
+                                                <a href="{% url 'admin.hotel.gallery' hotel.slug %}" class="btn btn-primary">
+                                                    <i class="fa fa-cloud-upload"></i>
+                                                </a>
+                                                <a href="{% url 'admin.hotel.edit' hotel.slug %}" class="btn btn-success">
                                                     <i class="fa fa-pencil"></i>
                                                 </a>
-                                                <a href="#" class="btn btn-danger">
+                                                <a href="{% url 'admin.hotel.delete' hotel.slug %}" class="btn btn-danger">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
                                             </td>

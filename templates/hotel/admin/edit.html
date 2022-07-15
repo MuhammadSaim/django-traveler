@@ -1,6 +1,6 @@
 {% extends "layouts/app.html" %}
 
-{% block title %} Admin - Create Hotel {% endblock %}
+{% block title %} Admin - Edit Hotel {% endblock %}
 
 {% block styles %}
     <style>
@@ -17,13 +17,13 @@
     <!-- Title -->
     <div class="row heading-bg">
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h5 class="txt-dark">Create Hotel</h5>
+            <h5 class="txt-dark">Edit Hotel</h5>
         </div>
         <!-- Breadcrumb -->
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active"><a href="#"><span>Create Hotel</span></a></li>
+                <li class="active"><a href="#"><span>Edit Hotel</span></a></li>
             </ol>
         </div>
         <!-- /Breadcrumb -->
@@ -34,7 +34,7 @@
             <div class="col-sm-12">
                 <div class="panel panel-default border-panel card-view">
                     <div class="panel-heading">
-                        <div class="pull-left">Create Hotel</div>
+                        <div class="pull-left">Edit Hotel</div>
                         <div class="clearfix"></div>
                     </div>
                     <div class="panel-wrapper collapse in">
@@ -54,7 +54,7 @@
                                         </ul>
                                     </div>
                                 {% endif %}
-                                <form action="{% url 'admin.hotel.create' %}" method="post" enctype="multipart/form-data">
+                                <form action="{% url 'admin.hotel.edit' hotel.slug %}" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="row">
                                         <div class="col-md-12">
@@ -68,18 +68,24 @@
                                         <div class="col-md-12">
                                             <label for="feature_image" class="control-label mb-10">Feature image</label>
                                             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                            <div class="form-control" data-trigger="fileinput"><i
-                                                    class="glyphicon glyphicon-file fileinput-exists"></i> <span
-                                                    class="fileinput-filename"></span></div>
-                                            <span class="input-group-addon fileupload btn btn-default btn-anim btn-file"><i
-                                                    class="fa fa-upload"></i> <span class="fileinput-new btn-text">Select file</span> <span
-                                                    class="fileinput-exists btn-text">Change</span>
-														<input type="file" name="feature_image" accept="image/jpeg,image/png,image/jpg">
-														</span> <a href="#"
-                                                                   class="input-group-addon btn btn-default btn-anim fileinput-exists"
-                                                                   data-dismiss="fileinput"><i
-                                                class="fa fa-trash"></i><span class="btn-text"> Remove</span></a>
-                                        </div>
+                                                <div class="form-control" data-trigger="fileinput">
+                                                    <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                                    <span class="fileinput-filename"></span>
+                                                </div>
+                                                <span class="input-group-addon fileupload btn btn-default btn-anim btn-file">
+                                                    <i class="fa fa-upload"></i>
+                                                    <span class="fileinput-new btn-text">Select file</span>
+                                                    <span class="fileinput-exists btn-text">Change</span>
+                                                    <input type="file" name="feature_image" accept="image/jpeg,image/png,image/jpg">
+                                                </span>
+                                                <a href="#"
+                                                   class="input-group-addon btn btn-default btn-anim fileinput-exists"
+                                                   data-dismiss="fileinput">
+                                                    <i class="fa fa-trash"></i>
+                                                    <span class="btn-text"> Remove</span>
+                                                </a>
+                                            </div>
+                                            <img src="{{ hotel.feature_image.url }}" alt="{{ hotel.name }}" width="200">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -122,7 +128,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn btn-info">Create</button>
+                                            <button type="submit" class="btn btn-info">Save</button>
                                         </div>
                                     </div>
                                 </form>
@@ -135,6 +141,7 @@
 
 {% endblock %}
 
+
 {% block scripts %}
     <script
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5FkhFVkNKuG766Wqhqw_ieEUro-b-_cQ&callback=initMap"
@@ -142,13 +149,10 @@
     ></script>
     <script>
 
-        document.getElementById('latitude').value = 30.246433;
-        document.getElementById('longitude').value = 71.473478;
-
         // Initialize and add the map
         function initMap() {
               // The location of Uluru
-              const uluru = { lat: 30.246433, lng: 71.473478 };
+              const uluru = { lat: parseFloat('{{ hotel.latitude }}'), lng: parseFloat('{{ hotel.longitude }}') };
               // The map, centered at Uluru
               const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16,

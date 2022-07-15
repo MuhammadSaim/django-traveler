@@ -1,0 +1,110 @@
+{% extends "layouts/app.html" %}
+
+{% block title %} Admin - Gallery {% endblock %}
+
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">Gallery</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>Gallery</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">{{ hotel.name }}'s Gallery</div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        {% if images %}
+                            <div class="row">
+                                {% for image in images %}
+                                    <div class="col-lg-2 col-md-4 col-sm-4 col-xs-6">
+                                        <div class="panel panel-default card-view pa-0">
+                                            <div class="panel-wrapper collapse in">
+                                                <div class="panel-body pa-0">
+                                                    <article class="col-item">
+                                                        <div class="photo">
+                                                            <div class="options">
+                                                                <a href="{% url 'admin.hotel.gallery.delete' id=image.id slug=hotel.slug %}"
+                                                                   class="font-18 txt-danger mr-10 pull-left"><i
+                                                                        class="zmdi zmdi-delete"></i></a>
+                                                            </div>
+                                                            <a href="javascript:void(0);">
+                                                                <img src="{{ image.image.url }}" class="img-responsive" alt="Product Image"/>
+                                                            </a>
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="text-align: center; padding: 10px;">Sorry you haven't uploaded any images yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">Upload images</div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        {% include 'includes/messages.html' %}
+                        <div class="form-wrap">
+                            <form action="{% url 'admin.hotel.gallery' hotel.slug %}" enctype="multipart/form-data" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="image" class="control-label mb-10">Upload images</label>
+                                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput"><i
+                                                    class="glyphicon glyphicon-file fileinput-exists"></i> <span
+                                                    class="fileinput-filename"></span></div>
+                                            <span class="input-group-addon fileupload btn btn-default btn-anim btn-file"><i
+                                                    class="fa fa-upload"></i> <span class="fileinput-new btn-text">Select file</span> <span
+                                                    class="fileinput-exists btn-text">Change</span>
+														<input type="file" multiple name="image" accept="image/jpeg,image/jpg,image/png">
+														</span> <a href="#"
+                                                                   class="input-group-addon btn btn-default btn-anim fileinput-exists"
+                                                                   data-dismiss="fileinput"><i
+                                                class="fa fa-trash"></i><span class="btn-text"> Remove</span></a>
+                                        </div>
+                                        </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-info">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

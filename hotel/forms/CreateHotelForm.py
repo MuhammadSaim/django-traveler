@@ -1,6 +1,6 @@
 from django import forms
 from django.core.files.images import get_image_dimensions
-from hotel.models import Hotel
+from hotel.models.Hotel import Hotel
 
 
 class CreateHotelForm(forms.ModelForm):
@@ -22,7 +22,8 @@ class CreateHotelForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "id": "latitude",
-                "placeholder": "Latitude"
+                "placeholder": "Latitude",
+                'readonly': True
             }
         ),
         required=True
@@ -33,7 +34,8 @@ class CreateHotelForm(forms.ModelForm):
             attrs={
                 "class": "form-control",
                 "id": "longitude",
-                "placeholder": "Longitude"
+                "placeholder": "Longitude",
+                'readonly': True
             }
         ),
         required=True
@@ -93,7 +95,6 @@ class CreateHotelForm(forms.ModelForm):
             raise forms.ValidationError("Please provide a feature image.")
         else:
             w, h = get_image_dimensions(feature_image)
-            print([w, h])
             if w < 500:
                 self.add_error('feature_image', "Width or height of the image should be greater then 500px.")
                 raise forms.ValidationError("Width or height of the image should be greater then 500px.")
