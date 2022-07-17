@@ -9,6 +9,7 @@ mysqlclient = "*"
 pillow = "*"
 django-imagekit = "*"
 textblob = "*"
+tzdata = "*"
 
 [dev-packages]
 
