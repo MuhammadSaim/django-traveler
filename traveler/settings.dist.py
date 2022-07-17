@@ -85,9 +85,9 @@ WSGI_APPLICATION = 'traveler.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'traveler',
-        'USER': 'muhammadsaim',
-        'PASSWORD': 'muhammadsaim',
+        'NAME': 'DB_NAME',
+        'USER': 'DB_USER',
+        'PASSWORD': 'DB_PASSWORD',
         'HOST': 'localhost',
         'PORT': '3306',
     }
