@@ -1,0 +1,257 @@
+{% extends 'layouts/app.html' %}
+
+{% block title %} Hotel - {{ hotel.name }} {% endblock %}
+{% load static %}
+
+{% block styles %}
+    <style>
+        #map {
+          height: 400px;
+          /* The height is 400 pixels */
+          width: 100%;
+          /* The width is the width of the web page */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">Home</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>{{ hotel.name|upper }}</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body pt-0">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="item-big">
+                                    <img src="{{ hotel.feature_image.url }}" alt="{{ hotel.name }}" width="300">
+                                </div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="product-detail-wrap">
+                                    <div class="product-rating inline-block mb-10">
+                                        <div class="my-rating-fixed" data-rating="{{ hotel.total_rating }}"></div>
+                                    </div>
+                                    <div class="average-review block mb-10">&nbsp;(<span
+                                            class="review-count">{{ reviews.count }}</span> customer review)
+                                    </div>
+                                    <h4 class="mb-5 weight-500">{{ hotel.name }}</h4>
+                                    <div class="product-price head-font mb-15">$ 1234</div>
+                                    <p class="mb-25">
+                                        {{ hotel.description|slice:':200' }}
+                                    </p>
+                                    <div class="btn-group mr-10">
+                                        <button class="btn btn-dark btn-anim">
+                                            <i class="fa fa-calendar"></i>
+                                            <span class="btn-text">Make reservation</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Row -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            {% include 'includes/messages.html' %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong class="mb-2">Errors</strong>
+                    <br>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ field.label_tag }} {{ error|escape }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-heading">Location</div>
+                    <div class="panel-body">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body pt-0">
+                        <div class="tab-struct custom-tab-1 product-desc-tab">
+                            <ul role="tablist" class="nav nav-tabs nav-tabs-responsive" id="myTabs_7">
+                                <li class="active" role="presentation"><a class="pt-0 pl-5 pr-5 pb-15"
+                                                                          aria-expanded="true" data-toggle="tab"
+                                                                          role="tab" id="descri_tab"
+                                                                          href="#descri_tab_detail"><span>Description</span></a>
+                                </li>
+                                <li role="presentation" class="next"><a class="pt-0 pl-5 pr-5 pb-15" data-toggle="tab"
+                                                                        id="adi_info_tab" role="tab"
+                                                                        href="#adi_info_tab_detail"
+                                                                        aria-expanded="false"><span>Aditional information</span></a>
+                                </li>
+                                <li role="presentation" class=""><a class="pt-0 pl-5 pr-5 pb-15" data-toggle="tab"
+                                                                    id="review_tab" role="tab" href="#review_tab_detail"
+                                                                    aria-expanded="false"><span>Review<span
+                                        class="inline-block">(<span class="review-count">{{ reviews.count }}</span>)</span></span></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent_7">
+                                <div id="descri_tab_detail" class="tab-pane fade active in pt-0" role="tabpanel">
+                                    <p class="pt-15">
+                                        {{ hotel.description }}
+                                    </p>
+                                </div>
+                                <div id="adi_info_tab_detail" class="tab-pane pt-0 fade" role="tabpanel">
+                                    <div class="table-wrap">
+                                        <div class="table-responsive">
+                                            <table class="table  mb-0">
+                                                <tbody>
+                                                <tr>
+                                                    <td class="border-none">SIZE</td>
+                                                    <td class="border-none">31, 32, 33, 34, 35</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>COLOR</td>
+                                                    <td>blue, red, rosa, white</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>TAGS</td>
+                                                    <td>Diesel, shoe, stars</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="review_tab_detail" class="tab-pane pt-0 fade" role="tabpanel">
+                                    {% for review in reviews %}
+                                        <div class="panel pane-default card-view">
+                                            <div class="panel-heading">
+                                                <div class="pull-left">
+                                                    {% if review.user.first_name and review.user.last_name %}
+                                                        {{ review.user.first_name }} {{ review.user.last_name }}
+                                                    {% else %}
+                                                        {{ review.user.username }}
+                                                    {% endif %}
+                                                </div>
+                                                <div class="pull-right">
+                                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                                        <div class="my-rating-fixed" data-rating="{{ review.rating }}"></div>
+                                                        <div style="margin-left: 10px; display: flex; justify-content: center; align-items: center">
+                                                            <img width="20" src="{% static 'images/emojis' %}/{{ review.emoji  }}" alt="{{ review.emotion }}">
+                                                            <strong style="margin-left: 5px;">{{ review.emotion }}</strong>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="panel-wrapper collapse in">
+                                                <div class="panel-body">{{ review.comment }}</div>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <p class="muted review-tag pt-15">No reviews yet.</p>
+                                    {% endfor %}
+                                    {% if user.is_authenticated %}
+                                        <div class="row mt-30">
+                                        <div class="col-sm-6">
+                                            <div class="form-wrap">
+                                                <form method="post" action="{% url 'hotel.details' hotel.slug %}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10" for="review">Your
+                                                            rating</label>
+                                                        <div class='product-rating starrr' id='star1'>
+                                                            <div class="my-rating-variable"></div>
+                                                            {{ form.rating }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10" for="comment">Your
+                                                            comment</label>
+                                                        {{ form.comment }}
+                                                    </div>
+                                                    <div class="form-group mb-0">
+                                                        <button type="submit" class="btn btn-info btn-sm  mr-10">
+                                                            Submit
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5FkhFVkNKuG766Wqhqw_ieEUro-b-_cQ&callback=initMap"
+      defer
+    ></script>
+    <script>
+
+        // Initialize and add the map
+        function initMap() {
+              // The location of Uluru
+              const uluru = { lat: parseFloat('{{ hotel.latitude }}'), lng: parseFloat('{{ hotel.longitude }}') };
+              // The map, centered at Uluru
+              const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 16,
+                center: uluru,
+              });
+              // The marker, positioned at Uluru
+              const marker = new google.maps.Marker({
+                position: uluru,
+                map: map,
+              });
+        }
+
+        window.initMap = initMap;
+    </script>
+{% endblock %}

@@ -2,7 +2,6 @@
 
 {% block title %} Home - traveler {% endblock %}
 
-
 {% block content %}
     <!-- Title -->
     <div class="row heading-bg">
@@ -12,7 +11,7 @@
         <!-- Breadcrumb -->
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
             <ol class="breadcrumb">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
                 <li class="active"><a href="#"><span>Hotels</span></a></li>
             </ol>
         </div>
@@ -20,26 +19,22 @@
     </div>
     <!-- /Title -->
     <div class="row">
-        {% for item in data %}
-        <div class="col-md-4">
+        {% for hotel in hotels %}
+        <div class="col-md-3">
             <div class="panel panel-default card-view pa-0">
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body pa-0">
                         <article class="col-item">
                             <div class="photo">
-                                <a href="#">
-                                    <img src="https://source.unsplash.com/random/1920x1080/?{{ item }}"
-                                         class="img-responsive" alt="">
+                                <a href="{% url 'hotel.details' hotel.slug %}">
+                                    <img src="{{ hotel.feature_image.url }}"
+                                         class="img-responsive" alt="{{ hotel.name|slice:':30' }}">
                                 </a>
                             </div>
                             <div class="info">
-                                <h6>{{ item|upper }}</h6>
+                                <h6>{{ hotel.name|upper }}</h6>
                                 <div class="product-rating inline-block">
-                                    <a href="javascript:void(0);" class="font-20 txt-orange zmdi zmdi-star mr-0"></a>
-                                    <a href="javascript:void(0);" class="font-20 txt-orange zmdi zmdi-star mr-0"></a>
-                                    <a href="javascript:void(0);" class="font-20 txt-orange zmdi zmdi-star mr-0"></a>
-                                    <a href="javascript:void(0);" class="font-20 txt-orange zmdi zmdi-star mr-0"></a>
-                                    <a href="javascript:void(0);" class="font-20 txt-orange zmdi zmdi-star-outline mr-0"></a>
+                                    <div class="my-rating-fixed" data-rating="{{ hotel.total_rating }}"></div>
                                 </div>
                             </div>
                         </article>

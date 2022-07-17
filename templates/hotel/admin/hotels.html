@@ -53,7 +53,7 @@
                                                 <img width="50" src="{{ hotel.feature_image.url }}" alt="{{ hotel.name }}">
                                             </td>
                                             <td>{{ hotel.name }}</td>
-                                            <td>{{ hotel.address }}</td>
+                                            <td>{{ hotel.address|slice:':50' }}</td>
                                             <td>
                                                 {% if hotel.is_active %}
                                                     <span class="badge badge-success">Active</span>

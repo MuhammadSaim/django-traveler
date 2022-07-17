@@ -8,6 +8,7 @@
     </title>
     <link rel="stylesheet" href="{% static 'css/jasny-bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rating-star.css' %}">
     {% block styles %}{% endblock %}
 </head>
 <body>
@@ -43,9 +44,35 @@
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/lightgallery-all.js' %}"></script>
+    <script src="{% static 'js/gallery-data.js' %}"></script>
     <script src="{% static 'js/jasny-bootstrap.min.js' %}"></script>
     <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
     <script src="{% static 'js/init.js' %}"></script>
+    <script src="{% static 'js/rating-star.js' %}"></script>
+    <script>
+        $(".my-rating-fixed").starRating({
+              readOnly: true,
+              totalStars: 5,
+              starShape: 'rounded',
+              starSize: 25,
+              emptyColor: 'lightgray',
+              hoverColor: 'salmon',
+              activeColor: 'crimson',
+              useGradient: false
+        });
+        $(".my-rating-variable").starRating({
+              totalStars: 5,
+              starShape: 'rounded',
+              starSize: 25,
+              emptyColor: 'lightgray',
+              hoverColor: 'salmon',
+              activeColor: 'crimson',
+              useGradient: false,
+              callback: function (current_rating, $el){
+                  $("#id_rating").val(current_rating);
+              }
+        });
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

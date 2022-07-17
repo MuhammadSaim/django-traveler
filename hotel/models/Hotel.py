@@ -47,6 +47,8 @@ class Hotel(models.Model):
     address = models.TextField()
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+    total_rating = models.FloatField(default=0.0)
+    total_emotion_rating = models.FloatField(default=0.0)
 
     def save(self, *args, **kwargs):
         if not self.slug:
