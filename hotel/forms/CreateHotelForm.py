@@ -52,6 +52,28 @@ class CreateHotelForm(forms.ModelForm):
         required=True
     )
 
+    city = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "id": "address",
+                "placeholder": "City"
+            }
+        ),
+        required=True
+    )
+
+    price = forms.CharField(
+        widget=forms.NumberInput(
+            attrs={
+                "class": "form-control",
+                "id": "address",
+                "placeholder": "Price"
+            }
+        ),
+        required=True
+    )
+
     description = forms.Textarea(
         attrs={
             "class": "form-control",
@@ -71,7 +93,9 @@ class CreateHotelForm(forms.ModelForm):
             'longitude',
             'address',
             'description',
-            'is_active'
+            'is_active',
+            'price',
+            'city'
         )
         widgets = {
             'description': forms.Textarea(attrs={
@@ -89,6 +113,8 @@ class CreateHotelForm(forms.ModelForm):
         address = self.cleaned_data.get('address')
         description = self.cleaned_data.get('description')
         is_active = self.cleaned_data.get('is_active')
+        price = self.cleaned_data.get('price')
+        city = self.cleaned_data.get('price')
 
         if not feature_image:
             self.add_error('feature_image', "Please provide a feature image.")

@@ -1,0 +1,73 @@
+{% extends 'layouts/app.html' %}
+
+{% block title %} Hotel Reservation - {{ hotel.name }} {% endblock %}
+
+{% load humanize %}
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">Reservations</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>Reservations</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">Reservations</div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="table-responsive ">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Hotel</th>
+                                    {% if user.role == 'admin' %}
+                                        <th>User</th>
+                                    {% endif %}
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Price</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for reservation in reservations %}
+                                        <tr>
+                                            <td>{{ reservation.id }}</td>
+                                            <td>
+                                                {{ reservation.hotel.name }}
+                                            </td>
+                                            {% if user.role == 'admin' %}
+                                                <td>{{ reservation.user.username }}</td>
+                                            {% endif %}
+                                            <td>{{ reservation.start_date }}</td>
+                                            <td>{{ reservation.end_date }}</td>
+                                            <td>Rs {{ reservation.total_price|intcomma }}/-</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% include 'includes/pagination.html' with pagination=reservations %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

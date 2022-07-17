@@ -5,6 +5,8 @@ from hotel.forms.CreateReviewForm import CreateReviewForm
 from textblob import TextBlob
 from django.db.models import Sum
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from hotel.models.Reservation import Reservation
 
 
 # Create your views here.
@@ -62,3 +64,30 @@ def get_analysis(sentiment):
             return "smile.png", "Very Happy", sentiment.polarity
     else:
         return "sad.png", "Very Angry", sentiment.polarity
+
+
+@login_required
+def make_reservation(request, slug):
+    hotel = get_object_or_404(Hotel, slug=slug)
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        total_price = request.POST.get('total_price')
+        Reservation.objects.create(start_date=start_date, end_date=end_date, total_price=total_price, hotel=hotel, user=request.user)
+        messages.add_message(request, messages.SUCCESS, "Your hotel reservation is complete successfully.")
+    context = {
+        'hotel': hotel
+    }
+    return render(request, 'hotel/create_reservation.html', context)
+
+
+@login_required
+def reservations_view(request):
+    if request.user.role == 'admin':
+        reservations = Reservation.objects.all().order_by('-id')
+    else:
+        reservations = Reservation.objects.filter(user=request.user).all().order_by('-id')
+    context = {
+        'reservations': reservations
+    }
+    return render(request, 'hotel/reservations.html', context)

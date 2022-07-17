@@ -1,0 +1,78 @@
+{% extends 'layouts/app.html' %}
+
+{% block title %} Hotel Reservation - {{ hotel.name }} {% endblock %}
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">Reservation</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>{{ hotel.name|upper }}</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-heading">Make Your Reservation</div>
+                    <div class="panel-body">
+                        {% include 'includes/messages.html' %}
+                        <form action="{% url 'hotel.reservation.create' hotel.slug %}" method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="dates" class="control-label mb-10">Staying Date</label>
+                                    <input type="text" class="form-control" id="reservation_dates" required>
+                                    <input type="hidden" name="start_date" id="start_date" value="{% now 'Y-m-d' %}">
+                                    <input type="hidden" name="end_date" id="end_date" value="{% now 'Y-m-d' %}">
+                                    <input type="hidden" name="total_price" id="total_price" value="{{ hotel.price }}">
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 20px; margin-bottom: 20px">
+                                <div class="col-md-12">
+                                    <h3>
+                                        Rs<span id="price">{{ hotel.price }} / Day</span>
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-info">Book your room now</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+
+        function days(date_1, date_2){
+            let difference = date_1.getTime() - date_2.getTime();
+            return Math.ceil(difference / (1000 * 3600 * 24));
+        }
+
+        $("#reservation_dates").daterangepicker({
+            minDate: new Date()
+        }, function(start, end, label){
+            $("#start_date").val(start.format('YYYY-MM-DD'));
+            $("#end_date").val(end.format('YYYY-MM-DD'));
+            var total_price = parseInt('{{ hotel.price }}') * days(new Date(end), new Date(start))
+            $("#total_price").val(total_price);
+            $("#price").html(total_price);
+        });
+    </script>
+{% endblock %}
