@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default border-panel card-view">
+            <div class="panel-heading">
+                <div class="pull-left">Search</div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-wrapper collapse in">
+                <div class="panel-body">
+                    <form action="" method="get">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <label for="price" class="control-label mb-10">Price</label>
+                                <select name="price" id="price" class="form-control">
+                                    <option value="">Choose price</option>
+                                    <option {% if 'price' in request.GET %} {% if request.GET.price == '5000' %} selected {% endif %} {% endif %} value="5000">< Rs 5000 / Day</option>
+                                    <option {% if 'price' in request.GET %} {% if request.GET.price == '8000' %} selected {% endif %} {% endif %} value="8000">< Rs 8000 / Day</option>
+                                    <option {% if 'price' in request.GET %} {% if request.GET.price == '10000' %} selected {% endif %} {% endif %} value="10000">< Rs 10000 / Day</option>
+                                    <option {% if 'price' in request.GET %} {% if request.GET.price == '15000' %} selected {% endif %} {% endif %} value="15000">< Rs 15000 / Day</option>
+                                    <option {% if 'price' in request.GET %} {% if request.GET.price == '20000' %} selected {% endif %} {% endif %} value="20000">< Rs 20000 / Day</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label for="rating" class="control-label mb-10">Rating</label>
+                                <select name="rating" id="rating" class="form-control">
+                                    <option value="">Choose rating</option>
+                                    <option {% if 'rating' in request.GET %} {% if request.GET.rating == '1' %} selected {% endif %} {% endif %} value="1">1</option>
+                                    <option {% if 'rating' in request.GET %} {% if request.GET.rating == '2' %} selected {% endif %} {% endif %} value="2">2</option>
+                                    <option {% if 'rating' in request.GET %} {% if request.GET.rating == '3' %} selected {% endif %} {% endif %} value="3">3</option>
+                                    <option {% if 'rating' in request.GET %} {% if request.GET.rating == '4' %} selected {% endif %} {% endif %} value="4">4</option>
+                                    <option {% if 'rating' in request.GET %} {% if request.GET.rating == '5' %} selected {% endif %} {% endif %} value="5">5</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 col-sm-12">
+                                <label for="city" class="control-label mb-10">City</label>
+                                <select name="city" id="city" class="form-control">
+                                    <option value="">Choose city</option>
+                                    {% for city in cities %}
+                                        <option {% if 'city' in request.GET %} {% if request.GET.city == city.city %} selected {% endif %} {% endif %} value="{{ city.city }}">{{ city.city }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px">
+                            <div class="col-md-12">
+                                <button class="btn btn-info" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

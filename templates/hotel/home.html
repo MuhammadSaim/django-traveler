@@ -18,6 +18,9 @@
         <!-- /Breadcrumb -->
     </div>
     <!-- /Title -->
+
+    {% include 'includes/search_form.html' with cities=cities %}
+
     <div class="row">
         {% for hotel in hotels %}
         <div class="col-md-3">
