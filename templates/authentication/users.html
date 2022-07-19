@@ -1,0 +1,100 @@
+{% extends 'layouts/app.html' %}
+
+{% block title %} Manage Users {% endblock %}
+
+{% load humanize %}
+
+{% block content %}
+    <!-- Title -->
+    <div class="row heading-bg">
+        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+            <h5 class="txt-dark">Manage Users</h5>
+        </div>
+        <!-- Breadcrumb -->
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active"><a href="#"><span>Manage Users</span></a></li>
+            </ol>
+        </div>
+        <!-- /Breadcrumb -->
+    </div>
+    <!-- /Title -->
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default border-panel card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">Users</div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="table-responsive ">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+                                            <td>
+                                                {% if user.avatar %}
+                                                    <img width="70" class="img-circle" src="{{ user.avatar.url }}" alt="{{ user.username }}">
+                                                {% else %}
+                                                    <img width="70" class="img-circle" src="https://ui-avatars.com/api/?name={{ user.username }}" alt="{{ user.username }}">
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                    <span class="badge badge-success">Active</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">Inactive</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if user.role == 'admin' %}
+                                                    <span class="badge badge-info">Admin</span>
+                                                {% else %}
+                                                    <span class="badge badge-primary">User</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if user.is_active %}
+                                                    <a href="{% url 'user.status' user.id %}" class="btn btn-info">
+                                                        <i class="fa fa-eye-slash"></i>
+                                                    </a>
+                                                {% else %}
+                                                    <a href="{% url 'user.status' user.id %}" class="btn btn-info">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                {% endif %}
+                                                <a href="{% url 'user.delete' user.id %}" class="btn btn-danger">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% include 'includes/pagination.html' with pagination=reservations %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
