@@ -12,6 +12,7 @@
                 <div class="clearfix"></div>
             </a>
         </li>
+        {% if user.is_authenticated %}
         <li>
             <a href="{% url 'hotel.reservation' %}">
                 <div class="pull-left"><i class="ti-book mr-20"></i><span class="right-nav-text">Reservations</span>
@@ -19,6 +20,7 @@
                 <div class="clearfix"></div>
             </a>
         </li>
+        {% endif %}
         {% if user.role == 'admin' %}
             <li>
                 <a href="{% url 'admin.hotels' %}">
