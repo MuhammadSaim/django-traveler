@@ -16,12 +16,15 @@ from hotel.models.Reservation import Reservation
 def home_view(request):
     cities = Hotel.objects.order_by().values('city').distinct()
     hotels = Hotel.objects.filter(is_active=True)
-    if request.GET.get('price'):
-        hotels = hotels.filter(price__lte=request.GET.get('price'))
-    if request.GET.get('rating'):
-        hotels = hotels.filter(total_rating__lte=request.GET.get('rating'))
-    if request.GET.get('city'):
-        hotels = hotels.filter(city__exact=request.GET.get('city'))
+    if request.GET.get('q'):
+        hotels = hotels.filter(name__icontains=request.GET.get('q'))
+    else:
+        if request.GET.get('price'):
+            hotels = hotels.filter(price__lte=request.GET.get('price'))
+        if request.GET.get('rating'):
+            hotels = hotels.filter(total_rating__lte=request.GET.get('rating'))
+        if request.GET.get('city'):
+            hotels = hotels.filter(city__exact=request.GET.get('city'))
     hotels = hotels.all().order_by('-total_emotion_rating')
     context = {
         'hotels': hotels,
