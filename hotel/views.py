@@ -36,10 +36,10 @@ def home_view(request):
 def hotel_detail_view(request, slug):
     hotel = get_object_or_404(Hotel, slug=slug)
     reviews = HotelReview.objects.filter(hotel=hotel).all().order_by('-id')
-    total_location = HotelReview.objects.aggregate(Sum('location'))['location__sum']
-    total_value_of_money = HotelReview.objects.aggregate(Sum('value_of_money'))['value_of_money__sum']
-    total_cleanliness = HotelReview.objects.aggregate(Sum('cleanliness'))['cleanliness__sum']
-    total_services = HotelReview.objects.aggregate(Sum('services'))['services__sum']
+    total_location = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('location'))['location__sum']
+    total_value_of_money = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('value_of_money'))['value_of_money__sum']
+    total_cleanliness = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('cleanliness'))['cleanliness__sum']
+    total_services = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('services'))['services__sum']
     print(total_location)
     form = CreateReviewForm(request.POST or None)
     if form.is_valid():

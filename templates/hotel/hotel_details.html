@@ -110,22 +110,38 @@
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
-                        <h1 class="text-info text-center">{{ hotel.total_rating }}</h1>
+                        <h1 class="text-info text-center">{% if hotel.total_rating %} {{ hotel.total_rating }} {% else %} 0.0 {% endif %}</h1>
                         <div style="margin-bottom: 15px">
                             <strong style="text-align: center;" class="block">Location</strong>
-                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_location|div:reviews.count }}"></div>
+                            {% if total_location %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_location|div:reviews.count }}"></div>
+                            {% else %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="0"></div>
+                            {% endif %}
                         </div>
                         <div style="margin-bottom: 15px">
                             <strong style="text-align: center;" class="block">Value Of Money</strong>
-                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_value_of_money|div:reviews.count }}"></div>
+                            {% if total_value_of_money %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_value_of_money|div:reviews.count }}"></div>
+                            {% else %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="0.0"></div>
+                            {% endif %}
                         </div>
                         <div style="margin-bottom: 15px">
                             <strong style="text-align: center;" class="block">Cleanliness</strong>
-                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_cleanliness|div:reviews.count }}"></div>
+                            {% if total_cleanliness %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_cleanliness|div:reviews.count }}"></div>
+                            {% else %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="0.0"></div>
+                            {% endif %}
                         </div>
                         <div style="margin-bottom: 15px">
                             <strong style="text-align: center;" class="block">Services</strong>
-                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_services|div:reviews.count }}"></div>
+                            {% if total_services %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_services|div:reviews.count }}"></div>
+                            {% else %}
+                                <div class="my-rating-fixed-large" style="text-align: center" data-rating="0.0"></div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
