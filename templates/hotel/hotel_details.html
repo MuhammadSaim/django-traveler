@@ -2,6 +2,7 @@
 
 {% block title %} Hotel - {{ hotel.name }} {% endblock %}
 {% load static %}
+{% load custom_tags %}
 
 {% block styles %}
     <style>
@@ -50,6 +51,11 @@
                                     <div class="product-rating inline-block mb-10">
                                         <div class="my-rating-fixed" data-rating="{{ hotel.total_rating }}"></div>
                                     </div>
+                                    {% if reviews.count > 0 %}
+                                    <div class="average-review block mb-10">
+                                        <h4 class="text-info">{{ hotel.total_rating }} ({{ hotel.total_rating|rating }})</h4>
+                                    </div>
+                                    {% endif %}
                                     <div class="average-review block mb-10">&nbsp;(<span
                                             class="review-count">{{ reviews.count }}</span> customer review)
                                     </div>
@@ -94,7 +100,38 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-info card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <div class="panel-title txt-light">Review Summery</div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <h1 class="text-info text-center">{{ hotel.total_rating }}</h1>
+                        <div style="margin-bottom: 15px">
+                            <strong style="text-align: center;" class="block">Location</strong>
+                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_location|div:reviews.count }}"></div>
+                        </div>
+                        <div style="margin-bottom: 15px">
+                            <strong style="text-align: center;" class="block">Value Of Money</strong>
+                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_value_of_money|div:reviews.count }}"></div>
+                        </div>
+                        <div style="margin-bottom: 15px">
+                            <strong style="text-align: center;" class="block">Cleanliness</strong>
+                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_cleanliness|div:reviews.count }}"></div>
+                        </div>
+                        <div style="margin-bottom: 15px">
+                            <strong style="text-align: center;" class="block">Services</strong>
+                            <div class="my-rating-fixed-large" style="text-align: center" data-rating="{{ total_services|div:reviews.count }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
             <div class="panel panel-default card-view">
                 <div class="panel-wrapper collapse in">
                     <div class="panel-heading">Location</div>
@@ -171,7 +208,7 @@
                                                 </div>
                                                 <div class="pull-right">
                                                     <div style="display: flex; align-items: center; justify-content: space-between;">
-                                                        <div class="my-rating-fixed" data-rating="{{ review.rating }}"></div>
+                                                        <div class="my-rating-fixed" data-rating="{{ review.avg_rating }}"></div>
                                                         <div style="margin-left: 10px; display: flex; justify-content: center; align-items: center">
                                                             <img width="20" src="{% static 'images/emojis' %}/{{ review.emoji  }}" alt="{{ review.emotion }}">
                                                             <strong style="margin-left: 5px;">{{ review.emotion }}</strong>
@@ -181,7 +218,27 @@
                                                 <div class="clearfix"></div>
                                             </div>
                                             <div class="panel-wrapper collapse in">
-                                                <div class="panel-body">{{ review.comment }}</div>
+                                                <div class="panel-body">
+                                                    <div style="margin-bottom: 10px">
+                                                        <div style="margin-bottom: 5px">
+                                                            <strong>Location</strong>
+                                                            <div class="my-rating-fixed" data-rating="{{ review.location }}"></div>
+                                                        </div>
+                                                        <div style="margin-bottom: 5px">
+                                                            <strong>Value of money</strong>
+                                                            <div class="my-rating-fixed" data-rating="{{ review.value_of_money }}"></div>
+                                                        </div>
+                                                        <div style="margin-bottom: 5px">
+                                                            <strong>Cleanliness</strong>
+                                                            <div class="my-rating-fixed" data-rating="{{ review.cleanliness }}"></div>
+                                                        </div>
+                                                        <div style="margin-bottom: 5px">
+                                                            <strong>Services</strong>
+                                                            <div class="my-rating-fixed" data-rating="{{ review.services }}"></div>
+                                                        </div>
+                                                    </div>
+                                                    <p>{{ review.comment }}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     {% empty %}
@@ -194,11 +251,31 @@
                                                 <form method="post" action="{% url 'hotel.details' hotel.slug %}">
                                                     {% csrf_token %}
                                                     <div class="form-group">
-                                                        <label class="control-label mb-10" for="review">Your
-                                                            rating</label>
+                                                        <label class="control-label mb-10" for="loctaion">Location</label>
                                                         <div class='product-rating starrr' id='star1'>
-                                                            <div class="my-rating-variable"></div>
-                                                            {{ form.rating }}
+                                                            <div class="my-rating-variable" data-target-input="#id_location"></div>
+                                                            {{ form.location }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10" for="value_of_money">Value of money</label>
+                                                        <div class='product-rating starrr' id='star1'>
+                                                            <div class="my-rating-variable" data-target-input="#id_value_of_money"></div>
+                                                            {{ form.value_of_money }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10" for="cleanliness">Cleanliness</label>
+                                                        <div class='product-rating starrr' id='star1'>
+                                                            <div class="my-rating-variable" data-target-input="#id_cleanliness"></div>
+                                                            {{ form.cleanliness }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label mb-10" for="services">Services</label>
+                                                        <div class='product-rating starrr' id='star1'>
+                                                            <div class="my-rating-variable" data-target-input="#id_services"></div>
+                                                            {{ form.services }}
                                                         </div>
                                                     </div>
                                                     <div class="form-group">

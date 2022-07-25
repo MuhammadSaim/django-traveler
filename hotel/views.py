@@ -33,19 +33,28 @@ def home_view(request):
 def hotel_detail_view(request, slug):
     hotel = get_object_or_404(Hotel, slug=slug)
     reviews = HotelReview.objects.filter(hotel=hotel).all().order_by('-id')
+    total_location = HotelReview.objects.aggregate(Sum('location'))['location__sum']
+    total_value_of_money = HotelReview.objects.aggregate(Sum('value_of_money'))['value_of_money__sum']
+    total_cleanliness = HotelReview.objects.aggregate(Sum('cleanliness'))['cleanliness__sum']
+    total_services = HotelReview.objects.aggregate(Sum('services'))['services__sum']
+    print(total_location)
     form = CreateReviewForm(request.POST or None)
     if form.is_valid():
         has_review = HotelReview.objects.filter(user=request.user, hotel=hotel).first()
         if not has_review:
             HotelReview.objects.filter()
-            rating = form.cleaned_data.get('rating')
+            location = form.cleaned_data.get('location')
+            value_of_money = form.cleaned_data.get('value_of_money')
+            cleanliness = form.cleaned_data.get('cleanliness')
+            services = form.cleaned_data.get('services')
+            avg_rating = (float(location) + float(value_of_money) + float(services) + float(cleanliness)) / 4.0
             comment = form.cleaned_data.get('comment')
             image, sentiment, polarity = text_analyzer(comment)
             hotel.total_emotion_rating = hotel.total_emotion_rating + float("{:.2f}".format(polarity))
-            HotelReview.objects.create(rating=rating, comment=comment, user=request.user, hotel=hotel, emoji=image, emotion=sentiment)
-            total_sum_rating = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('rating'))
+            HotelReview.objects.create(location=location, value_of_money=value_of_money, cleanliness=cleanliness, services=services, avg_rating=avg_rating, comment=comment, user=request.user, hotel=hotel, emoji=image, emotion=sentiment)
+            total_sum_rating = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('avg_rating'))
             total_rating_count = HotelReview.objects.filter(hotel=hotel).count()
-            hotel.total_rating = total_sum_rating['rating__sum'] / total_rating_count
+            hotel.total_rating = total_sum_rating['avg_rating__sum'] / total_rating_count
             hotel.save()
             messages.add_message(request, messages.SUCCESS, "Your review is submitted successfully.")
         else:
@@ -54,7 +63,11 @@ def hotel_detail_view(request, slug):
     context = {
         'hotel': hotel,
         'form': form,
-        'reviews': reviews
+        'reviews': reviews,
+        'total_location': total_location,
+        'total_value_of_money': total_value_of_money,
+        'total_cleanliness': total_cleanliness,
+        'total_services': total_services
     }
     return render(request, 'hotel/hotel_details.html', context)
 

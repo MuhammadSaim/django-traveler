@@ -63,6 +63,16 @@
               activeColor: 'crimson',
               useGradient: false
         });
+        $(".my-rating-fixed-large").starRating({
+              readOnly: true,
+              totalStars: 5,
+              starShape: 'rounded',
+              starSize: 40,
+              emptyColor: 'lightgray',
+              hoverColor: 'salmon',
+              activeColor: 'crimson',
+              useGradient: false
+        });
         $(".my-rating-variable").starRating({
               totalStars: 5,
               starShape: 'rounded',
@@ -72,7 +82,7 @@
               activeColor: 'crimson',
               useGradient: false,
               callback: function (current_rating, $el){
-                  $("#id_rating").val(current_rating);
+                  $($el.data('target-input')).val(current_rating);
               }
         });
     </script>
