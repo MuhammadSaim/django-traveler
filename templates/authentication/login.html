@@ -11,6 +11,19 @@
                     <h6 class="text-center nonecase-font txt-grey">Enter your details below</h6>
                 </div>
                 <div class="form-wrap">
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong class="mb-2">Errors</strong>
+                            <br>
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li>{{ field.label_tag }} {{ error|escape }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <form action="{% url 'login' %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
@@ -27,7 +40,7 @@
 
                         <div class="form-group">
                             <div class="checkbox checkbox-primary pr-10 pull-left">
-                                <input id="checkbox_2" required="" type="checkbox">
+                                <input id="checkbox_2" type="checkbox">
                                 <label for="checkbox_2"> Keep me logged in</label>
                             </div>
                             <div class="clearfix"></div>

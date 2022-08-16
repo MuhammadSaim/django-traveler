@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from hotel.models.Reservation import Reservation
+from hotel.models.HotelImage import HotelImage
 
 
 # Create your views here.
@@ -35,33 +36,34 @@ def home_view(request):
 
 def hotel_detail_view(request, slug):
     hotel = get_object_or_404(Hotel, slug=slug)
+    gallery = HotelImage.objects.filter(hotel=hotel).all()
+    gallery_count = range(gallery.count() + 1)
     reviews = HotelReview.objects.filter(hotel=hotel).all().order_by('-id')
     total_location = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('location'))['location__sum']
+    print(total_location)
     total_value_of_money = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('value_of_money'))['value_of_money__sum']
     total_cleanliness = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('cleanliness'))['cleanliness__sum']
     total_services = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('services'))['services__sum']
     print(total_location)
     form = CreateReviewForm(request.POST or None)
     if form.is_valid():
-        has_review = HotelReview.objects.filter(user=request.user, hotel=hotel).first()
-        if not has_review:
-            HotelReview.objects.filter()
-            location = form.cleaned_data.get('location')
-            value_of_money = form.cleaned_data.get('value_of_money')
-            cleanliness = form.cleaned_data.get('cleanliness')
-            services = form.cleaned_data.get('services')
-            avg_rating = (float(location) + float(value_of_money) + float(services) + float(cleanliness)) / 4.0
-            comment = form.cleaned_data.get('comment')
-            image, sentiment, polarity = text_analyzer(comment)
-            hotel.total_emotion_rating = hotel.total_emotion_rating + float("{:.2f}".format(polarity))
-            HotelReview.objects.create(location=location, value_of_money=value_of_money, cleanliness=cleanliness, services=services, avg_rating=avg_rating, comment=comment, user=request.user, hotel=hotel, emoji=image, emotion=sentiment)
-            total_sum_rating = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('avg_rating'))
-            total_rating_count = HotelReview.objects.filter(hotel=hotel).count()
-            hotel.total_rating = total_sum_rating['avg_rating__sum'] / total_rating_count
-            hotel.save()
-            messages.add_message(request, messages.SUCCESS, "Your review is submitted successfully.")
-        else:
-            messages.add_message(request, messages.ERROR, "You already submit a review for this hotel.")
+        HotelReview.objects.filter()
+        location = form.cleaned_data.get('location')
+        value_of_money = form.cleaned_data.get('value_of_money')
+        cleanliness = form.cleaned_data.get('cleanliness')
+        services = form.cleaned_data.get('services')
+        avg_rating = (float(location) + float(value_of_money) + float(services) + float(cleanliness)) / 4.0
+        comment = form.cleaned_data.get('comment')
+        image, sentiment, polarity = text_analyzer(comment)
+        hotel.total_emotion_rating = hotel.total_emotion_rating + float("{:.2f}".format(polarity))
+        HotelReview.objects.create(location=location, value_of_money=value_of_money, cleanliness=cleanliness,
+                                   services=services, avg_rating=avg_rating, comment=comment, user=request.user,
+                                   hotel=hotel, emoji=image, emotion=sentiment)
+        total_sum_rating = HotelReview.objects.filter(hotel=hotel).aggregate(Sum('avg_rating'))
+        total_rating_count = HotelReview.objects.filter(hotel=hotel).count()
+        hotel.total_rating = total_sum_rating['avg_rating__sum'] / total_rating_count
+        hotel.save()
+        messages.add_message(request, messages.SUCCESS, "Your review is submitted successfully.")
 
     context = {
         'hotel': hotel,
@@ -70,7 +72,9 @@ def hotel_detail_view(request, slug):
         'total_location': total_location,
         'total_value_of_money': total_value_of_money,
         'total_cleanliness': total_cleanliness,
-        'total_services': total_services
+        'total_services': total_services,
+        'gallery': gallery,
+        'gallery_count': gallery_count
     }
     return render(request, 'hotel/hotel_details.html', context)
 

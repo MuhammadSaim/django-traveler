@@ -39,10 +39,10 @@
                                 <h6>{{ hotel.name|upper }}</h6>
                                 <div class="product-rating">
                                     <div style="display: flex; justify-content: space-between; align-items: center">
-                                        <div class="my-rating-fixed" data-rating="{{ hotel.total_rating }}"></div>
+                                        <div class="my-rating-fixed" data-rating="{{ hotel.total_rating|floatformat:1 }}"></div>
                                         <strong class="text-info">
                                             {% if hotel.hotelreview_set.count > 0 %}
-                                                {{ hotel.total_rating }} ({{ hotel.total_rating|rating }})
+                                                {{ hotel.total_rating|floatformat:1 }} ({{ hotel.total_rating|rating }})
                                             {% endif %}
                                         </strong>
                                     </div>

@@ -42,18 +42,36 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="item-big">
-                                    <img src="{{ hotel.feature_image.url }}" alt="{{ hotel.name }}" width="300">
+                                    <!-- START carousel-->
+                                    <div id="carousel-example-captions-1" data-ride="carousel" class="carousel slide">
+                                        <ol class="carousel-indicators">
+                                            {% for i in gallery_count %}
+                                                <li {% if i == 0 %} class="active" {% endif %} data-target="#carousel-example-captions-1" data-slide-to="{{ i }}"></li>
+                                            {% endfor %}
+                                        </ol>
+                                        <div role="listbox" class="carousel-inner">
+                                            <div class="item active">
+                                                <img src="{{ hotel.feature_image.url }}" alt="{{ hotel.name }}" width="300">
+                                            </div>
+                                            {% for image in gallery %}
+                                                <div class="item">
+                                                    <img src="{{ image.image.url }}" alt="{{ hotel.name }}" width="300">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <!-- END carousel-->
                                 </div>
                             </div>
 
                             <div class="col-md-9">
                                 <div class="product-detail-wrap">
                                     <div class="product-rating inline-block mb-10">
-                                        <div class="my-rating-fixed" data-rating="{{ hotel.total_rating }}"></div>
+                                        <div class="my-rating-fixed" data-rating="{{ hotel.total_rating|floatformat:1 }}"></div>
                                     </div>
                                     {% if reviews.count > 0 %}
                                     <div class="average-review block mb-10">
-                                        <h4 class="text-info">{{ hotel.total_rating }} ({{ hotel.total_rating|rating }})</h4>
+                                        <h4 class="text-info">{{ hotel.total_rating|floatformat:1 }} ({{ hotel.total_rating|rating }})</h4>
                                     </div>
                                     {% endif %}
                                     <div class="average-review block mb-10">&nbsp;(<span
@@ -110,7 +128,7 @@
                 </div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
-                        <h1 class="text-info text-center">{% if hotel.total_rating %} {{ hotel.total_rating }} {% else %} 0.0 {% endif %}</h1>
+                        <h1 class="text-info text-center">{% if hotel.total_rating %} {{ hotel.total_rating|floatformat:1 }} {% else %} 0.00 {% endif %}</h1>
                         <div style="margin-bottom: 15px">
                             <strong style="text-align: center;" class="block">Location</strong>
                             {% if total_location %}
@@ -172,11 +190,6 @@
                                                                           role="tab" id="descri_tab"
                                                                           href="#descri_tab_detail"><span>Description</span></a>
                                 </li>
-                                <li role="presentation" class="next"><a class="pt-0 pl-5 pr-5 pb-15" data-toggle="tab"
-                                                                        id="adi_info_tab" role="tab"
-                                                                        href="#adi_info_tab_detail"
-                                                                        aria-expanded="false"><span>Aditional information</span></a>
-                                </li>
                                 <li role="presentation" class=""><a class="pt-0 pl-5 pr-5 pb-15" data-toggle="tab"
                                                                     id="review_tab" role="tab" href="#review_tab_detail"
                                                                     aria-expanded="false"><span>Review<span
@@ -188,28 +201,6 @@
                                     <p class="pt-15">
                                         {{ hotel.description }}
                                     </p>
-                                </div>
-                                <div id="adi_info_tab_detail" class="tab-pane pt-0 fade" role="tabpanel">
-                                    <div class="table-wrap">
-                                        <div class="table-responsive">
-                                            <table class="table  mb-0">
-                                                <tbody>
-                                                <tr>
-                                                    <td class="border-none">SIZE</td>
-                                                    <td class="border-none">31, 32, 33, 34, 35</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>COLOR</td>
-                                                    <td>blue, red, rosa, white</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>TAGS</td>
-                                                    <td>Diesel, shoe, stars</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
                                 </div>
                                 <div id="review_tab_detail" class="tab-pane pt-0 fade" role="tabpanel">
                                     {% for review in reviews %}
