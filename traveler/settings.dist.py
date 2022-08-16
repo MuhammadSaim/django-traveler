@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'imagekit',
     'authentication',
     'hotel',
+    'mailer.apps.MailerConfig'
 ]
 
 MIDDLEWARE = [
@@ -85,9 +86,9 @@ WSGI_APPLICATION = 'traveler.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB_NAME',
-        'USER': 'DB_USER',
-        'PASSWORD': 'DB_PASSWORD',
+        'NAME': 'django_traveler',
+        'USER': 'muhammadsaim',
+        'PASSWORD': 'muhammadsaim',
         'HOST': 'localhost',
         'PORT': '3306',
     }
@@ -145,3 +146,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads/')
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DEFAULT_FROM_EMAIL = 'no-reply@traveler.com'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.sendinblue.com'
+EMAIL_HOST_USER = 'muhammadsaim494@gmail.com'
+EMAIL_HOST_PASSWORD = 'xsmtpsib-cfa4cc591b8dcc43b4bf23fe8980d2e98b069ae3e7a74d5245dec1a4cd5975bd-mhdPgKq4D80Aj3Xc'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True

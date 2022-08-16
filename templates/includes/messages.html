@@ -2,7 +2,7 @@
 
     {% for msg in messages %}
 
-        <div class="alert alert-{{ msg.level_tag }} " role="alert">
+        <div class="alert alert-{% if msg.level_tag == 'error' %}danger {% else %}{{ msg.level_tag }} {% endif %} " role="alert">
 
             {{ msg.message }}
         </div>

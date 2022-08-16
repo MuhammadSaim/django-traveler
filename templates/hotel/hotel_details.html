@@ -3,6 +3,7 @@
 {% block title %} Hotel - {{ hotel.name }} {% endblock %}
 {% load static %}
 {% load custom_tags %}
+{% load humanize %}
 
 {% block styles %}
     <style>
@@ -209,8 +210,10 @@
                                                 <div class="pull-left">
                                                     {% if review.user.first_name and review.user.last_name %}
                                                         {{ review.user.first_name }} {{ review.user.last_name }}
+                                                        <div><strong>{{ review.created_at|naturaltime }}</strong></div>
                                                     {% else %}
                                                         {{ review.user.username }}
+                                                        <div><strong>{{ review.created_at|naturaltime }}</strong></div>
                                                     {% endif %}
                                                 </div>
                                                 <div class="pull-right">

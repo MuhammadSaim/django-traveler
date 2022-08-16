@@ -1,3 +1,5 @@
+import random
+import string
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import (
@@ -5,12 +7,16 @@ from django.contrib.auth import (
     login,
     logout
 )
+from django.urls import reverse
+import hashlib
 from django.core.paginator import Paginator
 from authentication.forms.UserLoginForm import UserLoginForm
 from authentication.forms.UserRegisterForm import UserRegisterForm
 from authentication.forms.UserProfileForm import UserProfileForm
 from .models import User
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 # login view for user login
@@ -60,6 +66,50 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+
+def forgot_password_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        user = User.objects.filter(email=email).first()
+        if user:
+            random_string = ''.join(random.choice(string.ascii_letters) for i in range(20))
+            token = hashlib.sha256(random_string.encode('utf-8')).hexdigest()
+            user.token = token
+            user.save()
+            link = request.build_absolute_uri(reverse('reset.password') + f'?token={token}')
+            msg = f'Hi.! {user.get_username()}, here is your link click on the link to set your new password'
+            msg += f' {link}'
+            send_mail(
+                subject="Traveler - Reset Password",
+                message=msg,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email]
+            )
+            messages.add_message(request, messages.SUCCESS, 'Reset password link is sent to your email.')
+        else:
+            messages.add_message(request, messages.ERROR, 'Sorry we couldn\'t find your email.')
+    return render(request, 'authentication/forgot_password.html')
+
+
+def reset_password_view(request):
+    token = request.GET.get('token')
+    user = User.objects.filter(token=token).first()
+    if user:
+        if request.method == 'POST':
+            password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+            if password == confirm_password:
+                user.set_password(password)
+                user.token = None
+                user.save()
+                return redirect('login')
+            else:
+                messages.add_message(request, messages.ERROR, 'Please put same password on both fields.')
+        return render(request, 'authentication/reset_password.html', {'token': token})
+    else:
+        return redirect('login')
 
 # user's profile view
 @login_required

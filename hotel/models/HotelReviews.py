@@ -14,3 +14,5 @@ class HotelReview(models.Model):
     comment = models.TextField()
     emoji = models.CharField(max_length=20, default='neutral.png')
     emotion = models.CharField(max_length=20, default='Neutral')
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    modified_at = models.DateTimeField(auto_now_add=True, blank=True)
