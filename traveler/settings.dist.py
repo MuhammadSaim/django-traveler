@@ -43,8 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'imagekit',
     'authentication',
-    'hotel',
-    'mailer.apps.MailerConfig'
+    'hotel'
 ]
 
 MIDDLEWARE = [
