@@ -84,7 +84,7 @@
                                         {{ hotel.description|slice:':200' }}
                                     </p>
                                     <div class="btn-group mr-10">
-                                        <a href="{% url 'hotel.reservation.create' hotel.slug %}" class="btn btn-dark btn-anim">
+                                        <a href="{% if user.is_authenticated %} {% url 'hotel.reservation.create' hotel.slug %} {% else %} {% url 'login'  %} {% endif %}" class="btn btn-dark btn-anim">
                                             <i class="fa fa-calendar"></i>
                                             <span class="btn-text">Make reservation</span>
                                         </a>
