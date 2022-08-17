@@ -29,7 +29,6 @@ def login_view(request):
         username = form.cleaned_data.get('username')
         password = form.cleaned_data.get('password')
         user = authenticate(username=username, password=password)
-        print(user)
         login(request, user)
         if next:
             return redirect(next)

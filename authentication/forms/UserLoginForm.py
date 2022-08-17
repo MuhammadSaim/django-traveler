@@ -1,7 +1,5 @@
 from django import forms
-from django.contrib.auth import (
-    authenticate
-)
+from authentication.models import User
 
 
 class UserLoginForm(forms.Form):
@@ -30,7 +28,7 @@ class UserLoginForm(forms.Form):
         password = self.cleaned_data.get('password')
 
         if username and password:
-            user = authenticate(username=username, password=password)
+            user = User.objects.filter(username=username).first()
             if not user:
                 self.add_error('username', "You haven't register yet please register first.")
                 raise forms.ValidationError("You haven't register yet please register first.")
