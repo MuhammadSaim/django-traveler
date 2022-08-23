@@ -83,6 +83,12 @@
                                         </div>
                                     </div>
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="address" class="control-label mb-10">Address</label>
+                                            {{ form.address }}
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                         <div class="col-md-6 col-sm-12">
                                             <label for="latitude" class="control-label mb-10">Latitude</label>
                                             {{ form.latitude }}
@@ -95,12 +101,6 @@
                                     <div class="row">
                                         <div class="col-md-12" style="padding: 10px 15px">
                                             <div id="map"></div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label for="address" class="control-label mb-10">Address</label>
-                                            {{ form.address }}
                                         </div>
                                     </div>
                                     <div class="row">
@@ -147,7 +147,8 @@
 
 {% block scripts %}
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5FkhFVkNKuG766Wqhqw_ieEUro-b-_cQ&callback=initMap"
+      src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initAutocomplete&language=nl&output=json&key=AIzaSyA5FkhFVkNKuG766Wqhqw_ieEUro-b-_cQ"
+      async
       defer
     ></script>
     <script>
@@ -156,27 +157,57 @@
         document.getElementById('longitude').value = 71.473478;
 
         // Initialize and add the map
-        function initMap() {
+        function initAutocomplete() {
+            var address = document.getElementById("address");
+            var autocomplete = new google.maps.places.Autocomplete(address);
+
+            autocomplete.addListener("place_changed", function () {
+              var place = autocomplete.getPlace();
+              var latitude = place.geometry.location.lat();
+              var longitude = place.geometry.location.lng();
+              document.getElementById('latitude').value = latitude;
+              document.getElementById('longitude').value = longitude;
+              renderForm({ lat: latitude, lng: longitude });
+            });
+
+            renderForm();
+        }
+
+        function renderForm(cords = {}) {
+            if (isEmpty(cords)) {
               // The location of Uluru
               const uluru = { lat: 30.246433, lng: 71.473478 };
               // The map, centered at Uluru
               const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 16,
-                center: uluru,
+                center: uluru
               });
               // The marker, positioned at Uluru
-              const marker = new google.maps.Marker({
+              new google.maps.Marker({
                 position: uluru,
-                map: map,
-                draggable: true
+                map: map
               });
+            } else {
+              // The map, centered at Uluru
+              const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 16,
+                center: cords
+              });
+              // The marker, positioned at Uluru
+              new google.maps.Marker({
+                position: cords,
+                map: map
+              });
+            }
+      }
 
-            google.maps.event.addListener(marker, "dragend", function(e){
-                  document.getElementById('latitude').value = e.latLng.lat();
-                  document.getElementById('longitude').value = e.latLng.lng();
-              });
+      function isEmpty(obj) {
+        for (var prop in obj) {
+          if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+            return false;
+          }
         }
-
-        window.initMap = initMap;
+        return JSON.stringify(obj) === JSON.stringify({});
+      }
     </script>
 {% endblock %}
